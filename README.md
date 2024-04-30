@@ -5,7 +5,8 @@ OpenAPI 3.0 CLI toolkit
 ## Usage
 
 ```prompt
-$ oapit -f schema.yml validate MySchema ./payload.json
+$ oapit validate schema -f schema.yml
+$ oapit -f schema.yml validate payload -s MySchema ./payload.json
 ```
 
 ## Install

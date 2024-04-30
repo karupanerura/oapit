@@ -8,45 +8,11 @@ import (
 
 // Options is a global options
 type Options struct {
-	SchemaFile              string   `short:"f" name:"schema-file" type:"existingfile" help:"OpenAPI 3.0 schema" required:""`
-	ValidateSchema          bool     `name:"validate-schema" negatable:"" default:"true" help:"TBD"`
-	ResolveReference        bool     `name:"resolve-reference" negatable:"" default:"true" help:"TBD"`
-	AllowExtraSiblingFields []string `name:"allow-extra-sibling-fields" optional:"" help:"TBD"`
-	ExamplesValidation      bool     `name:"validate-examples" negatable:"" default:"true" help:"TBD"`
-	DefaultsValidation      bool     `name:"validate-defaults" negatable:"" default:"true" help:"TBD"`
-	PatternValidation       bool     `name:"validate-patterns" negatable:"" default:"true" help:"TBD"`
+	SchemaFile       string `short:"f" name:"schema-file" type:"existingfile" help:"OpenAPI 3.0 schema" required:""`
+	ResolveReference bool   `name:"resolve-reference" negatable:"" default:"true" help:"TBD"`
 }
 
-func (o *Options) validationOptions() (opts []openapi3.ValidationOption) {
-	if len(o.AllowExtraSiblingFields) != 0 {
-		opts = append(opts, openapi3.AllowExtraSiblingFields(o.AllowExtraSiblingFields...))
-	}
-
-	// validate examples
-	if o.ExamplesValidation {
-		opts = append(opts, openapi3.EnableExamplesValidation())
-	} else {
-		opts = append(opts, openapi3.DisableExamplesValidation())
-	}
-
-	// validate defaults
-	if o.DefaultsValidation {
-		opts = append(opts, openapi3.EnableSchemaDefaultsValidation())
-	} else {
-		opts = append(opts, openapi3.DisableSchemaDefaultsValidation())
-	}
-
-	// validate pattern
-	if o.PatternValidation {
-		opts = append(opts, openapi3.EnableSchemaPatternValidation())
-	} else {
-		opts = append(opts, openapi3.DisableSchemaPatternValidation())
-	}
-
-	return
-}
-
-func (o *Options) LoadSchema(ctx context.Context) (*openapi3.T, error) {
+func (o *Options) LoadSchema(ctx context.Context, opts ...openapi3.ValidationOption) (*openapi3.T, error) {
 	loader := openapi3.NewLoader()
 	loader.Context = ctx
 	if o.ResolveReference {
@@ -64,8 +30,8 @@ func (o *Options) LoadSchema(ctx context.Context) (*openapi3.T, error) {
 		return nil, err
 	}
 
-	if o.ValidateSchema {
-		if err = doc.Validate(loader.Context, o.validationOptions()...); err != nil {
+	if len(opts) != 0 {
+		if err = doc.Validate(loader.Context, opts...); err != nil {
 			return nil, err
 		}
 	}
