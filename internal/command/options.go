@@ -9,7 +9,7 @@ import (
 // Options is a global options
 type Options struct {
 	SchemaFile       string `short:"f" name:"schema-file" type:"existingfile" help:"OpenAPI 3.0 schema" required:""`
-	ResolveReference bool   `name:"resolve-reference" negatable:"" default:"true" help:"TBD"`
+	ResolveReference bool   `name:"resolve-reference" negatable:"" default:"true" help:"Enable resolution of external references in the schema"`
 }
 
 func (o *Options) LoadSchema(ctx context.Context, opts ...openapi3.ValidationOption) (*openapi3.T, error) {
