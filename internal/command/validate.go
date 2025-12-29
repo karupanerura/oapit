@@ -17,10 +17,10 @@ type ValidateCommand struct {
 }
 
 type ValidateSchemaCommand struct {
-	AllowExtraSiblingFields []string `name:"allow-extra-sibling-fields" optional:"" help:"TBD"`
-	ExamplesValidation      bool     `name:"validate-examples" negatable:"" default:"true" help:"TBD"`
-	DefaultsValidation      bool     `name:"validate-defaults" negatable:"" default:"true" help:"TBD"`
-	PatternValidation       bool     `name:"validate-patterns" negatable:"" default:"true" help:"TBD"`
+	AllowExtraSiblingFields []string `name:"allow-extra-sibling-fields" optional:"" help:"Allow extra sibling fields for specified schema properties"`
+	ExamplesValidation      bool     `name:"validate-examples" negatable:"" default:"true" help:"Validate examples in the schema"`
+	DefaultsValidation      bool     `name:"validate-defaults" negatable:"" default:"true" help:"Validate default values in the schema"`
+	PatternValidation       bool     `name:"validate-patterns" negatable:"" default:"true" help:"Validate regex patterns in the schema"`
 }
 
 func (c *ValidateSchemaCommand) validationOptions() (opts []openapi3.ValidationOption) {
